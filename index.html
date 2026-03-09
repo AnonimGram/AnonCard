@@ -134,14 +134,22 @@
         
         // Расширяем на весь экран
         tg.expand();
-// Функция для получения данных пользователя
+ // Функция для получения данных пользователя
         function getUserData() {
             const user = tg.initDataUnsafe?.user;
             if (user) {
-                // Если есть username в Telegram, используем его, иначе формируем из имени
-                return user.username ? @${user.username} : 
-                       user.first_name ? @${user.first_name.toLowerCase()}${user.last_name ? '_' + user.last_name.toLowerCase() : ''} : 
-                       '@username';
+                // Если есть username в Telegram, используем его
+                if (user.username) {
+                    return '@' + user.username;
+                }
+                // Если нет username, но есть имя
+                if (user.first_name) {
+                    let name = user.first_name.toLowerCase();
+                    if (user.last_name) {
+                        name += '_' + user.last_name.toLowerCase();
+                    }
+                    return '@' + name;
+                }
             }
             return '@username'; // Если нет данных, показываем стандартный
         }
